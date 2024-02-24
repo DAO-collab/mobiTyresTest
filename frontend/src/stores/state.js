@@ -68,7 +68,6 @@ export const useAppStore = defineStore("appStore", {
                 window.location.href = "/"
         
             } catch (error) {
-                console.log("error ", error);
                 alert('Login failed. check your credentials and try again');
             }
         },
@@ -88,7 +87,6 @@ export const useAppStore = defineStore("appStore", {
                 window.location.href = "/"
 
             } catch (error) {
-                console.log("err ", error)
                 // Handle login failure (display an error message, etc.)
                 alert('sign up failed.');
             }
