@@ -1,6 +1,6 @@
 
 <h2>VueLaravelApp</h2>
-Welcome to [Your Project Name]! This readme file provides instructions on setting up and running the project.
+This readme file provides instructions on setting up and running the project.
 
 ### Frontend
 The frontend of the application is located in the frontend directory. Follow these steps to run the frontend app:
