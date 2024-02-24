@@ -1,20 +1,16 @@
 <template>
 <div>
 
-    <div v-if="isLoading">
-        <LoadingScreen/>
-    </div>
-    <div v-else class="login-main-section">
+    <div class="login-main-section">
         <div class="lms-wrapper">
             <h2 class="lg-title">Login</h2>
             <div class="login-container">
                 <div class="login-content">
-                    <!-- form to login. Will POST the data to the /login route -->
-                    <form @submit.prevent="loginUser">
+                    <form @submit.prevent="authStore.loginUser(loginDetails)">
 
                         <div class="email-container">
                             <label for="email">Email</label>
-                            <input v-model="email" id="email" name="email" required placeholder="" class="user-email" type="email">
+                            <input v-model="loginDetails.email" id="email" name="email" required placeholder="" class="user-email" type="email">
                         </div>
                         
                         <div class="password-container">
@@ -22,7 +18,7 @@
                             <div class="password-wrapper">
                                 <label for="passcode-input">Password</label>
                                 <div class="password-input">
-                                    <input v-model="password" name="password" required id="passcode-input" placeholder="" class="user-password" type="password">
+                                    <input v-model="loginDetails.password" name="password" required id="passcode-input" placeholder="" class="user-password" type="password">
                                 </div>
                             </div>
                         </div>
@@ -38,46 +34,23 @@
     </div>
 
 
-
-
 </div>
 </template>
 
 <script setup lang="ts">
 
-import Toast from '@/components/Toast.vue';
 import LoadingScreen from '@/components/LoadingScreen.vue';
 import { ref } from 'vue';
-import axiosInstance from '@/lib/axios.js'
+import {useAppStore} from '@/stores/state'
+
+const authStore = useAppStore()
 
 
-/**variable to hold state to know whento show loading screen */
-let isLoading = ref(false)
-
-/**use details to be used to log them in */
-const email = ref('');
-const password = ref('');
-
-// Login function
-const loginUser = async () => {
-    await axiosInstance.get("http://localhost:8000/sanctum/csrf-cookie")
-
-    try {
-        isLoading.value = true
-        const {data} = await axiosInstance.post('http://localhost:8000/login', {
-            email: email.value,
-            password: password.value,
-        });
-
-        alert('Login successful');
-        isLoading.value = false
-        window.location.href = "/"
-
-    } catch (error) {
-        isLoading.value = false
-        alert('Login failed. check your credentials and try again');
-    }
-};
+/**user details to be used to log them in */
+const loginDetails = ref({
+    email: "",
+    password: ""
+})
 
 </script>
 

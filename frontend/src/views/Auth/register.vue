@@ -1,31 +1,26 @@
 <template>
     <div>
 
-        <div v-if="isLoading">
-            <LoadingScreen/>
-        </div>
-
-        <main v-else class="main">
+        <main class="main">
             <div class="signup-form-container">
                 <h3 class="sign-up-title">Create an account</h3>
                 <div class="signup-form">
-                    <!-- form for signing up. Will POST the methods to the /register route -->
-                    <form @submit.prevent="registerUser" id="signup-form">
+                    <form @submit.prevent="authStore.registerUser(registerDetails)" id="signup-form">
                         
                         <div class="username-div">
                             <label for="user-name">Username</label>
-                            <input name="username" required id="user-name" placeholder="" type="text">
+                            <input v-model="registerDetails.name" name="username" required id="user-name" placeholder="" type="text">
                         </div>
 
                         <div class="email-div">
                             <label for="signup-email">Email</label>
-                            <input name="email" required id="user-email" type="email" placeholder="">
+                            <input v-model="registerDetails.email" name="email" required id="user-email" type="email" placeholder="">
                         </div>
 
                         <div class="password-div">
                             <label for="user-password">Password</label>
                             <div class="password-input">
-                                <input name="password" required id="user-password" type="password" placeholder="">
+                                <input v-model="registerDetails.password" name="password" required id="user-password" type="password" placeholder="">
                             </div>
                             
                         </div>
@@ -46,44 +41,17 @@
 
 import LoadingScreen from '@/components/LoadingScreen.vue';
 import { ref } from 'vue';
-import axiosInstance from '@/lib/axios.js'
+import {useAppStore} from '@/stores/state'
 
+const authStore = useAppStore()
+console.log("auth store a", authStore.loginUser);
+console.log("auth store d", authStore.registerUser);
+const registerDetails = ref({
+    email: "",
+    name: "",
+    password: ""
+})
 
-/**variable to hold state to know whento show loading screen */
- let isLoading = ref(false)
-
-/**user details to be used for registration */
-const email = ref('');
-const password = ref('');
-const username = ref('')
-
-/**handle user registration */
-const registerUser = async () => {
-    await axiosInstance.get("/sanctum/csrf-cookie")
-
-    const emailField = document.getElementById("user-email") as HTMLInputElement
-    const nameField = document.getElementById("user-name") as HTMLInputElement
-    const passwordField = document.getElementById("user-password") as HTMLInputElement
-    
-    try {
-        isLoading.value = true
-        const {data} = await axiosInstance.post('/register',{
-            email: emailField.value.trim(),
-            name: nameField.value.trim(),
-            password: passwordField.value.trim()
-        });
-
-        // Handle successful login (you might want to redirect or perform other actions)
-        alert('sign up successful');
-        isLoading.value = false
-        window.location.href = "/"
-
-    } catch (error) {
-        // Handle login failure (display an error message, etc.)
-        alert('sign up failed.');
-        isLoading.value = false
-    }
-};
 
 </script>
 
