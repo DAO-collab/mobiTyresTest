@@ -6,8 +6,15 @@
 
         <nav>
           <RouterLink class="a-link" to="/">Home</RouterLink>
-          <RouterLink class="a-link" to="/login">Login</RouterLink>
-          <RouterLink class="a-link" to="/register">Register</RouterLink>
+          <template v-if="authStore.user">
+            <button  @click="authStore.handleLogout" >Logout</button>
+          </template>
+
+          <template v-else>
+            <RouterLink class="a-link" to="/login">Login</RouterLink>
+            <RouterLink class="a-link" to="/register">Register</RouterLink>
+
+          </template>
         </nav>
       </div>
     </header>
@@ -19,6 +26,11 @@
 
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
+import {useAppStore} from '@/stores/state'
+
+
+/**instance of our app store */
+const authStore = useAppStore()
 
 </script>
 
