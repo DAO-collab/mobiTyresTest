@@ -27,6 +27,5 @@ axiosInstance.interceptors.response.use(null, (err)=> {
     state.handleRequestErrors(err)
     console.log("passed");
 })
-// await axiosInstance.get("http://localhost:8000/sanctum/csrf-cookie")
 */
 export default axiosInstance
