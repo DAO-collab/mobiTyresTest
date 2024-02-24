@@ -3,7 +3,9 @@
         <div v-if="isLoading">
             <LoadingScreen/>
         </div>
+        
         <div class="index-ord" v-else>
+            <!-- {{ authStore.user }} -->
             <div>
                 <div v-if="products.length > 0" class="av-products">
                     <h1>Products List</h1>
@@ -105,14 +107,21 @@
 import { RouterLink } from 'vue-router'
 import LoadingScreen from '@/components/LoadingScreen.vue';
 import { onMounted, ref} from 'vue';
-import axiosInstance from '@/lib/axios.js'
+import axiosInstance from '@/lib/axios'
+import {useAppStore} from '@/stores/state'
 
-/**variable to be used during dragging of table rows */
-let isDragOver = ref(false)
+
+/**instance of our app store */
+const authStore = useAppStore()
+
+// /**variable to be used during dragging of table rows */
+// let isDragOver = ref(false)
 
 /**funcs to run once file mounted */
 onMounted(async() => {
-  getProducts()
+    await authStore.getUser()  /**check if user auth first */
+    getProducts()
+
 })
 
 
@@ -150,7 +159,7 @@ async function deleteProduct(productId: any) {
     try {
         isLoading.value = true
 
-        const deleteItemUrl = `http://localhost:8000/product/${productId}`
+        const deleteItemUrl = `/product/${productId}`
         await axiosInstance.delete(deleteItemUrl)
 
         getProducts()
