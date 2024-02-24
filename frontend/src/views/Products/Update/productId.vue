@@ -82,7 +82,7 @@ import {routerKey, useRoute, useRouter} from 'vue-router'
 import AuthInput from '@/components/AuthInput.vue';
 
 onMounted(async ()=>{
-    // await axiosInstance.get("http://localhost:8000/sanctum/csrf-cookie")
+    // await axiosInstance.get("/sanctum/csrf-cookie")
 
     getProductDetails()
     // updateProduct()
@@ -117,7 +117,7 @@ let productID = route.params.productId;
 async function getProductDetails() {
 
     try {
-        const {data} = await axiosInstance.get(`http://localhost:8000/product/${productID}`)
+        const {data} = await axiosInstance.get(`/product/${productID}`)
         product_to_update.value = data.product
         isLoading.value = false
     } catch (error) {
@@ -146,7 +146,7 @@ async function updateProduct() {
         quantity: Number(productQuantity.value)
     }
 
-    await axiosInstance.get("http://localhost:8000/sanctum/csrf-cookie")
+    await axiosInstance.get("/sanctum/csrf-cookie")
 
     try {
         isLoading.value = true
