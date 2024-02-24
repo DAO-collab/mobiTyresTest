@@ -1,9 +1,10 @@
 <template>
 <div>
 
-
-
-    <div class="login-main-section">
+    <div v-if="isLoading">
+        <LoadingScreen/>
+    </div>
+    <div v-else class="login-main-section">
         <div class="lms-wrapper">
             <h2 class="lg-title">Login</h2>
             <div class="login-container">
@@ -45,9 +46,13 @@
 <script setup lang="ts">
 
 import Toast from '@/components/Toast.vue';
+import LoadingScreen from '@/components/LoadingScreen.vue';
 import { ref } from 'vue';
 import axiosInstance from '@/lib/axios.js'
 
+
+/**variable to hold state to know whento show loading screen */
+let isLoading = ref(false)
 
 /**use details to be used to log them in */
 const email = ref('');
@@ -58,13 +63,18 @@ const loginUser = async () => {
     await axiosInstance.get("http://localhost:8000/sanctum/csrf-cookie")
 
     try {
+        isLoading.value = true
         const {data} = await axiosInstance.post('http://localhost:8000/login', {
             email: email.value,
             password: password.value,
         });
 
         alert('Login successful');
+        isLoading.value = false
+        window.location.href = "/"
+
     } catch (error) {
+        isLoading.value = false
         alert('Login failed. check your credentials and try again');
     }
 };

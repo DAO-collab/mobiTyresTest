@@ -1,94 +1,100 @@
 <template>
-  <div class="index-ord" v-if="!isLoading">
-      <div>
-          <div v-if="products.length > 0" class="av-products">
-              <h1>Products List</h1>
-              <h3>Click <RouterLink to="/add_product">here</RouterLink> to add a product</h3>
-              
+    <div>
+        <div v-if="isLoading">
+            <LoadingScreen/>
+        </div>
+        <div class="index-ord" v-else>
+            <div>
+                <div v-if="products.length > 0" class="av-products">
+                    <h1>Products List</h1>
+                    <h3>Click <RouterLink to="/add_product">here</RouterLink> to add a product</h3>
+                    
 
-              <div>
-                  <section class="country-info-section">
-                      <div class="c-div">
-                          <div class="content-div">
-                              <div class="country-div">
-                                  <h1 ref="countryName" class="country-name"></h1>
-                                  <div class="img-popln">
-                                      <!-- <img class="population-img" src="../assets/people.png" alt="population image"> -->
-                                      <!-- <span ref="countryPopulation" class="total-population"></span> -->
-                                  </div>
-                              </div>
-
-                              <div class="addn">
-                                  <span ref="country" class="country-name"></span>
-                                  <span>,</span>
-                                  <span ref="continent" class="continent-name"></span>
-                              </div>
-
-                          </div>
-                          
-                      </div>
-                  </section>
-
-
-                  <section class="table-section">
-
-                      <div class="table-container">
-                          <div class="table-container-content">
-                              <div class="flex-wrapper">
-                  
-                                  <div class="table-info">
-                                      <h1 class="table-h">All products</h1>
-                                      <table class="tests-table">
-                                  <tr>
-                                      <th class="table-header">Product Name</th>
-                                      <th class="table-header">Store Location</th>
-                                      <th class="table-header">Quantity</th>
-                                      <th class="table-header">Selling Price</th>
-                                      <th class="table-header">Buying Price</th>
-                                      <th class="table-header">Status</th>
-                                  </tr>
-                                  <tr v-for="product in products" :key="product.id"
-                                  draggable="true"
-                                  :class="{ 'dragged-row': product.isDragOver }"
-                                  @dragstart="handleDragStart(product, $event)"
-                                  @dragover="handleDragOver($event)"
-                                  @drop="handleDrop(product, $event)"
-                                  @dragenter="handleDragEnter(product, $event)"
-                                  @dragleave="handleDragLeave(product)">
-                                      <td class="table-data">{{ product.name }}</td>
-                                      <td class="table-data">{{ product.store_location }}</td>
-                                      <td class="table-data">{{ product.quantity }}</td>
-                                      <td class="table-data">sh. {{ formatNumber(product.selling_price) }}</td>
-                                      <td class="table-data">sh. {{ formatNumber(product.buying_price) }}</td>
-                                      <td class="table-data">{{ product.status }}</td>
-                                      <!-- <td class="table-data"><svg style="cursor: pointer;" width="16px" height="16px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000" class="bi bi-three-dots-vertical"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path> </g></svg></td> -->
-                                    <td>
-                                        <div class="product-actions">
-                                                <a :href="'/update_product/'+ product.id">Update</a>
-                                                <p @click="deleteProduct(product.id)" style="cursor: pointer;color: red;">Delete</p>
+                    <div>
+                        <section class="country-info-section">
+                            <div class="c-div">
+                                <div class="content-div">
+                                    <div class="country-div">
+                                        <h1 ref="countryName" class="country-name"></h1>
+                                        <div class="img-popln">
+                                            <!-- <img class="population-img" src="../assets/people.png" alt="population image"> -->
+                                            <!-- <span ref="countryPopulation" class="total-population"></span> -->
                                         </div>
+                                    </div>
+
+                                    <div class="addn">
+                                        <span ref="country" class="country-name"></span>
+                                        <span>,</span>
+                                        <span ref="continent" class="continent-name"></span>
+                                    </div>
+
+                                </div>
+                                
+                            </div>
+                        </section>
 
 
-                                    </td>
-                                  </tr>
-                  
-                              </table>
-                                  </div>
-                  
-                              </div>
-                          </div>
-                      </div>
-                  </section>
-              </div>
-          </div>
+                        <section class="table-section">
 
-          <div v-else>
-              <h1>No products available now. <router-link to="/">click here to add</router-link></h1>
-          </div>
+                            <div class="table-container">
+                                <div class="table-container-content">
+                                    <div class="flex-wrapper">
+                        
+                                        <div class="table-info">
+                                            <h1 class="table-h">All products</h1>
+                                            <table class="tests-table">
+                                        <tr>
+                                            <th class="table-header">Product Name</th>
+                                            <th class="table-header">Store Location</th>
+                                            <th class="table-header">Quantity</th>
+                                            <th class="table-header">Selling Price</th>
+                                            <th class="table-header">Buying Price</th>
+                                            <th class="table-header">Status</th>
+                                        </tr>
+                                        <tr v-for="product in products" :key="product.id"
+                                        draggable="true"
+                                        :class="{ 'dragged-row': product.isDragOver }"
+                                        @dragstart="handleDragStart(product, $event)"
+                                        @dragover="handleDragOver($event)"
+                                        @drop="handleDrop(product, $event)"
+                                        @dragenter="handleDragEnter(product, $event)"
+                                        @dragleave="handleDragLeave(product)">
+                                            <td class="table-data">{{ product.name }}</td>
+                                            <td class="table-data">{{ product.store_location }}</td>
+                                            <td class="table-data">{{ product.quantity }}</td>
+                                            <td class="table-data">sh. {{ formatNumber(product.selling_price) }}</td>
+                                            <td class="table-data">sh. {{ formatNumber(product.buying_price) }}</td>
+                                            <td class="table-data">{{ product.status }}</td>
+                                            <!-- <td class="table-data"><svg style="cursor: pointer;" width="16px" height="16px" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" fill="#000000" class="bi bi-three-dots-vertical"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path> </g></svg></td> -->
+                                            <td>
+                                                <div class="product-actions">
+                                                        <a :href="'/update_product/'+ product.id">Update</a>
+                                                        <p @click="deleteProduct(product.id)" style="cursor: pointer;color: red;">Delete</p>
+                                                </div>
 
-      </div>
 
-  </div>
+                                            </td>
+                                        </tr>
+                        
+                                    </table>
+                                        </div>
+                        
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <div v-else>
+                    <h1>No products available now. <router-link to="/">click here to add</router-link></h1>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 
 </template>
@@ -97,7 +103,7 @@
 <script setup lang="ts">
 
 import { RouterLink } from 'vue-router'
-
+import LoadingScreen from '@/components/LoadingScreen.vue';
 import { onMounted, ref} from 'vue';
 import axiosInstance from '@/lib/axios.js'
 
@@ -142,8 +148,12 @@ async function getProducts() {
 /**sends request to delete product from db */
 async function deleteProduct(productId: any) {
     try {
+        isLoading.value = true
+
         const deleteItemUrl = `http://localhost:8000/product/${productId}`
         await axiosInstance.delete(deleteItemUrl)
+
+        getProducts()
 
         alert(`item with id of ${productId} deleted`)
     } catch (error) {

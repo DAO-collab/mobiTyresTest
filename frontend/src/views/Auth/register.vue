@@ -1,47 +1,56 @@
 <template>
     <div>
 
-    <main class="main">
-        <div class="signup-form-container">
-            <h3 class="sign-up-title">Create an account</h3>
-            <div class="signup-form">
-                <!-- form for signing up. Will POST the methods to the /register route -->
-                <form @submit.prevent="registerUser" id="signup-form">
-                    
-                    <div class="username-div">
-                        <label for="user-name">Username</label>
-                        <input name="username" required id="user-name" placeholder="" type="text">
-                    </div>
-
-                    <div class="email-div">
-                        <label for="signup-email">Email</label>
-                        <input name="email" required id="user-email" type="email" placeholder="">
-                    </div>
-
-                    <div class="password-div">
-                        <label for="user-password">Password</label>
-                        <div class="password-input">
-                            <input name="password" required id="user-password" type="password" placeholder="">
-                        </div>
-                        
-                    </div>
-
-                    <div class="btn-container">
-                        <button class="register-btn" type="submit">Sign Up</button>
-                    </div>
-                </form>
-                <p>Have an account? <RouterLink to="/login">Login</RouterLink> </p>
-            </div>
+        <div v-if="isLoading">
+            <LoadingScreen/>
         </div>
-    </main>
+
+        <main v-else class="main">
+            <div class="signup-form-container">
+                <h3 class="sign-up-title">Create an account</h3>
+                <div class="signup-form">
+                    <!-- form for signing up. Will POST the methods to the /register route -->
+                    <form @submit.prevent="registerUser" id="signup-form">
+                        
+                        <div class="username-div">
+                            <label for="user-name">Username</label>
+                            <input name="username" required id="user-name" placeholder="" type="text">
+                        </div>
+
+                        <div class="email-div">
+                            <label for="signup-email">Email</label>
+                            <input name="email" required id="user-email" type="email" placeholder="">
+                        </div>
+
+                        <div class="password-div">
+                            <label for="user-password">Password</label>
+                            <div class="password-input">
+                                <input name="password" required id="user-password" type="password" placeholder="">
+                            </div>
+                            
+                        </div>
+
+                        <div class="btn-container">
+                            <button class="register-btn" type="submit">Sign Up</button>
+                        </div>
+                    </form>
+                    <p>Have an account? <RouterLink to="/login">Login</RouterLink> </p>
+                </div>
+            </div>
+        </main>
 
     </div>
 </template>
 
 <script setup lang="ts">
+
+import LoadingScreen from '@/components/LoadingScreen.vue';
 import { ref } from 'vue';
 import axiosInstance from '@/lib/axios.js'
 
+
+/**variable to hold state to know whento show loading screen */
+ let isLoading = ref(false)
 
 /**user details to be used for registration */
 const email = ref('');
@@ -50,13 +59,14 @@ const username = ref('')
 
 /**handle user registration */
 const registerUser = async () => {
-    await axiosInstance.get("http://localhost:8000/sanctum/csrf-cookie")
+    await axiosInstance.get("/sanctum/csrf-cookie")
 
     const emailField = document.getElementById("user-email") as HTMLInputElement
     const nameField = document.getElementById("user-name") as HTMLInputElement
     const passwordField = document.getElementById("user-password") as HTMLInputElement
     
     try {
+        isLoading.value = true
         const {data} = await axiosInstance.post('/register',{
             email: emailField.value.trim(),
             name: nameField.value.trim(),
@@ -65,9 +75,13 @@ const registerUser = async () => {
 
         // Handle successful login (you might want to redirect or perform other actions)
         alert('sign up successful');
+        isLoading.value = false
+        window.location.href = "/"
+
     } catch (error) {
         // Handle login failure (display an error message, etc.)
-        alert('sign up failed');
+        alert('sign up failed.');
+        isLoading.value = false
     }
 };
 
