@@ -44,8 +44,7 @@ import { ref } from 'vue';
 import {useAppStore} from '@/stores/state'
 
 const authStore = useAppStore()
-console.log("auth store a", authStore.loginUser);
-console.log("auth store d", authStore.registerUser);
+
 const registerDetails = ref({
     email: "",
     name: "",
