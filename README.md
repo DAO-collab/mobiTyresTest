@@ -73,17 +73,7 @@ These instructions will help you set up and run the project on your local machin
     php artisan migrate
     ```
 
-6. **Install npm Dependencies and Build Assets:**
-
-    ```bash
-    npm install
-    # or
-    yarn
-    # then
-    npm run dev
-    ```
-
-7. **Run the Application:**
+6. **Run the Application:**
 
     ```bash
     php artisan serve
@@ -101,11 +91,7 @@ Run the following commands:
 npm install
 npm run dev
 ```
-If you want to prepare the frontend for production, you can use:
 
-```
-npm run build
-```
-After building, you can open the app on the specified port.
+After that, you can open the app on the specified port.
 
 Happy coding!
